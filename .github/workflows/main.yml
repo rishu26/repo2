@@ -1,14 +1,13 @@
-on: [push]
-
+name: gitleaks
+on:
+  pull_request:
 jobs:
-  hello_world_job:
-    runs-on: ubuntu-latest
-    name: A job to say hello
+  hello:
+    runs-on: self-hosted
+    name: Secure Code Scanning
     steps:
-      - uses: actions/checkout@v4
-      - id: foo
-        uses: rishu26/repo1@v1
+      - run: python3 /home/ubuntu/actions-runner/scan.py -p ${{ github.event.pull_request.html_url }} -n ${{github.repository_id}}_${{ github.event.pull_request.number }}.txt -r ${{ github.repository}}
+      - name: Comment request
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          who-to-greet: 'Hey Rishu'
-      - run: echo random-number ${{ steps.foo.outputs.random-number }}
-        shell: bash
+          filePath: /home/ubuntu/actions-runner/${{github.repository_id}}_${{ github.event.pull_request.number }}.txt

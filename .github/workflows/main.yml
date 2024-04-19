@@ -1,4 +1,4 @@
-name: gitleaks
+name: pr_scan
 on:
   pull_request:
 jobs:
@@ -6,7 +6,7 @@ jobs:
     runs-on: self-hosted
     name: Secure Code Scanning
     steps:
-      - run: python3 /home/ubuntu/actions-runner/scan.py -p ${{ github.event.pull_request.html_url }} -n ${{github.repository_id}}_${{ github.event.pull_request.number }}.txt -r ${{ github.repository}}
+      - run: python3 /home/ubuntu/actions-runner/secret_scan.py -p ${{ github.event.pull_request.html_url }} -n ${{github.repository_id}}_${{ github.event.pull_request.number }}.txt -r ${{ github.repository}}
       - name: Comment request
         uses: thollander/actions-comment-pull-request@v2
         with:
